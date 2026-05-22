@@ -1,0 +1,290 @@
+/* ---- Header ---- */
+.header {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+}
+
+.header-inner {
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  color: var(--text);
+}
+
+.header-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.health-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.health-ok    { background: #7caa7c; }
+.health-error { background: #c07070; }
+.health-loading { background: var(--border); }
+
+.status-label {
+  font-size: 13px;
+  color: var(--subtext);
+}
+
+/* ---- Layout ---- */
+.main {
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 28px 24px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+/* ---- Cards ---- */
+.upload-card,
+.docs-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px;
+  box-shadow: var(--shadow);
+}
+
+.section-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+/* ---- Drop Zone ---- */
+.drop-zone {
+  border: 1.5px dashed var(--border);
+  border-radius: 8px;
+  padding: 28px 16px;
+  text-align: center;
+  cursor: pointer;
+  background: #faf9f7;
+  margin-bottom: 14px;
+  color: var(--subtext);
+  font-size: 13px;
+  transition: border-color 0.15s, background 0.15s;
+  user-select: none;
+}
+.drop-zone:hover {
+  border-color: var(--primary);
+  background: #f7f8fc;
+}
+.drop-zone.dragging {
+  border-color: var(--primary);
+  background: #f0f3fb;
+}
+.drop-zone.has-file {
+  border-style: solid;
+  border-color: var(--primary);
+  background: #f7f8fc;
+}
+
+.drop-zone-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.drop-zone-icon {
+  color: var(--primary);
+  margin-bottom: 2px;
+}
+.drop-zone-hint {
+  font-size: 12px;
+  color: #b2afa9;
+  margin-top: 2px;
+}
+
+.drop-zone-file {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.drop-zone-filename {
+  font-weight: 500;
+  color: var(--text);
+  word-break: break-all;
+  max-width: 240px;
+}
+.drop-zone-filesize {
+  font-size: 12px;
+  color: var(--subtext);
+}
+
+/* ---- Progress Bar ---- */
+.progress-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.progress-bar {
+  flex: 1;
+  height: 6px;
+  background: #edeae4;
+  border-radius: 99px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--primary);
+  border-radius: 99px;
+  transition: width 0.1s ease;
+}
+.progress-label {
+  font-size: 12px;
+  color: var(--subtext);
+  min-width: 32px;
+  text-align: right;
+}
+
+/* ---- Message ---- */
+.message {
+  padding: 9px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+.message-success { background: var(--success-bg); color: var(--success-text); }
+.message-error   { background: var(--error-bg);   color: var(--error-text);   }
+
+/* ---- Upload Button ---- */
+.upload-btn {
+  width: 100%;
+  padding: 10px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.upload-btn:hover:not(:disabled) { background: var(--primary-hover); }
+.upload-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ---- Docs Card ---- */
+.docs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.docs-header .section-title { margin-bottom: 0; }
+
+.refresh-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 15px;
+  color: var(--subtext);
+  line-height: 1;
+  font-family: inherit;
+  transition: color 0.12s, border-color 0.12s;
+}
+.refresh-btn:hover:not(:disabled) {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+.refresh-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ---- Document List ---- */
+.doc-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.doc-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #faf9f7;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+}
+
+.doc-info { flex: 1; min-width: 0; }
+
+.doc-name {
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.doc-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.file-tag {
+  font-size: 11px;
+  padding: 1px 7px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+.file-tag-pdf { background: #f2ede8; color: #8a7060; }
+.file-tag-txt { background: #e8eef2; color: #507080; }
+
+.doc-size {
+  font-size: 12px;
+  color: var(--subtext);
+}
+
+/* ---- States ---- */
+.list-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 30px 0;
+  color: var(--subtext);
+  font-size: 13px;
+}
+
+.list-placeholder {
+  text-align: center;
+  padding: 30px 0;
+  color: var(--subtext);
+  font-size: 13px;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 620px) {
+  .layout { grid-template-columns: 1fr; }
+  .main { padding: 20px 16px; }
+  .header-inner { padding: 12px 16px; }
+}

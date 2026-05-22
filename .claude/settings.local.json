@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(& \"c:\\\\Users\\\\Kali\\\\Documents\\\\Projeto 0\\\\backend\\\\app\\\\.venv\\\\Scripts\\\\python.exe\" -c \"import fastapi; print\\('fastapi OK'\\); import pydantic; print\\('pydantic OK'\\)\")",
+      "PowerShell($env:VIRTUAL_ENV; [System.Environment]::GetEnvironmentVariable\\('VIRTUAL_ENV', 'User'\\); [System.Environment]::GetEnvironmentVariable\\('VIRTUAL_ENV', 'Machine'\\))",
+      "Bash(cmd.exe /c \"rmdir /s /q \\\\\"c:\\\\Users\\\\Kali\\\\Documents\\\\Projeto 0\\\\backend\\\\app\\\\.venv\\\\\"\")",
+      "PowerShell($env:VIRTUAL_ENV = $null; Remove-Item -Recurse -Force \"c:\\\\Users\\\\Kali\\\\Documents\\\\Projeto 0\\\\backend\\\\app\\\\.venv\" -ErrorAction SilentlyContinue; Set-Location \"c:\\\\Users\\\\Kali\\\\Documents\\\\Projeto 0\\\\backend\\\\app\"; uv sync 2>&1)",
+      "PowerShell($env:VIRTUAL_ENV = $null; Set-Location \"c:\\\\Users\\\\Kali\\\\Documents\\\\Projeto 0\\\\backend\\\\app\"; uv run python --version 2>&1)",
+      "PowerShell(uv --version)",
+      "PowerShell(uv python list 2>&1)",
+      "PowerShell($env:VIRTUAL_ENV = $null; Set-Location \"c:\\\\Users\\\\Kali\\\\Documents\\\\Projeto 0\\\\backend\\\\app\"; Remove-Item -Recurse -Force \".venv\" -ErrorAction SilentlyContinue; uv venv --python 3.14 2>&1)",
+      "PowerShell($env:VIRTUAL_ENV = $null; Set-Location \"c:\\\\Users\\\\Kali\\\\Documents\\\\Projeto 0\\\\backend\\\\app\"; uv venv --python 3.14 --clear 2>&1)",
+      "PowerShell($env:VIRTUAL_ENV = $null; Set-Location \"c:\\\\Users\\\\Kali\\\\Documents\\\\Projeto 0\\\\backend\\\\app\"; uv venv --python 3.14 2>&1)",
+      "Bash(cmd.exe /c \"del /f /q \\\\\"c:\\\\Users\\\\Kali\\\\Documents\\\\Projeto 0\\\\backend\\\\app\\\\.venv\\\\Scripts\\\\python.exe\\\\\"\")",
+      "PowerShell($env:VIRTUAL_ENV = $null; Set-Location \"c:\\\\Users\\\\Kali\\\\Documents\\\\Projeto 0\\\\backend\\\\app\"; uv sync 2>&1)",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\Kali\\\\Documents\\\\Projeto 0\" -Recurse -Depth 2)",
+      "Bash(Select-Object -Property FullName, PSIsContainer)",
+      "Bash(ConvertTo-Json)",
+      "Bash(npm create *)",
+      "PowerShell(node --version; \\(Get-Command node -ErrorAction SilentlyContinue\\).Source; \\(Get-Command npm -ErrorAction SilentlyContinue\\).Source; $env:PATH -split \";\" | Select-String -Pattern \"node\")",
+      "PowerShell(winget install OpenJS.NodeJS.LTS --accept-package-agreements --accept-source-agreements 2>&1)",
+      "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); node --version; npm --version)",
+      "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); cd \"c:\\\\Users\\\\Kali\\\\Documents\\\\Projeto 0\"; npm create vite@latest frontend -- --template react 2>&1)",
+      "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); cd \"c:\\\\Users\\\\Kali\\\\Documents\\\\Projeto 0\\\\frontend\"; npm install; npm install axios 2>&1)",
+      "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); cd \"c:\\\\Users\\\\Kali\\\\Documents\\\\Projeto 0\\\\frontend\"; npm run build 2>&1)",
+      "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); cd \"c:\\\\Users\\\\Kali\\\\Documents\\\\Projeto 0\\\\frontend\"; Start-Process npm -ArgumentList \"run\",\"dev\" -PassThru | Select-Object Id; Start-Sleep -Seconds 4; Invoke-WebRequest -Uri \"http://localhost:5173\" -UseBasicParsing -TimeoutSec 5 | Select-Object StatusCode)"
+    ]
+  }
+}

@@ -1,5 +1,5 @@
 from typing import Protocol,TypedDict
-9
+
 Metadata = TypedDict('Metadata', {'filename': str, 'content_type' : str, 'size' : int})
 
 class StorageBackend(Protocol):
