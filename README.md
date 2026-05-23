@@ -1,24 +1,44 @@
 # PaperBox
 
-API de ingestão e organização de documentos pessoais. Envie PDFs e TXTs e consulte metadados via REST.
+API REST para ingestão e organização de documentos pessoais. Envie PDFs e TXTs, consulte metadados e remova arquivos via endpoints simples. Inclui interface web para interação direta.
 
 ---
 
 ## Stack
 
-**Backend**
-- Python 3.14 + FastAPI + uvicorn
-- aiofiles — I/O assíncrono de arquivos
-- pydantic-settings — configuração via variáveis de ambiente
-
-**Frontend**
-- React + Vite
+| Camada | Tecnologia |
+|--------|-----------|
+| Backend | Python 3.12 · FastAPI · uvicorn · aiofiles · pydantic-settings |
+| Frontend | React 19 · Vite · axios |
+| Produção | nginx (reverse proxy + SPA) · Docker Compose |
 
 ---
 
 ## Como rodar
 
-### Backend
+### Docker (recomendado)
+
+```bash
+docker compose up --build
+```
+
+| Serviço | Endereço |
+|---------|----------|
+| Interface web | `http://localhost:80` |
+| API | `http://localhost:8000` |
+| Documentação interativa | `http://localhost:8000/docs` |
+
+Os arquivos enviados são persistidos no volume `uploads_data` — reiniciar os containers não apaga os dados.
+
+> **Atenção:** os metadados ficam em memória. Reiniciar o container da API limpa a lista de documentos, mas os arquivos físicos permanecem no volume.
+
+---
+
+### Local
+
+#### Backend
+
+Requer Python 3.14+ e [`uv`](https://docs.astral.sh/uv/).
 
 ```bash
 cd backend/app
@@ -26,10 +46,9 @@ uv sync
 uv run fastapi dev main.py
 ```
 
-API disponível em `http://localhost:8000`  
-Documentação interativa em `http://localhost:8000/docs`
+API em `http://localhost:8000` · Docs em `http://localhost:8000/docs`
 
-### Frontend
+#### Frontend
 
 ```bash
 cd frontend
@@ -37,21 +56,46 @@ npm install
 npm run dev
 ```
 
-Interface disponível em `http://localhost:5173`
+Interface em `http://localhost:5173`
 
-> O frontend proxia `/docs` e `/health` para `http://localhost:8000` — o backend precisa estar rodando.
+> Em modo local o Vite proxia `/docs` e `/health` para `http://localhost:8000` — o backend precisa estar rodando.
 
 ---
 
 ## Endpoints
 
-| Método | Rota | Descrição |
-|--------|------|-----------|
-| `GET` | `/health` | Status da API |
-| `GET` | `/docs/` | Lista todos os documentos |
-| `POST` | `/docs/upload` | Faz upload de um arquivo (PDF ou TXT) |
-| `GET` | `/docs/{doc_id}` | Retorna metadados de um documento |
-| `DELETE` | `/docs/{doc_id}` | Remove um documento |
+### Health
+
+| Método | Rota | Resposta |
+|--------|------|----------|
+| `GET` | `/health` | `{"status": "ok", "versao": "1.0.0"}` |
+
+### Documentos
+
+| Método | Rota | Descrição | Status |
+|--------|------|-----------|--------|
+| `GET` | `/docs/` | Lista todos os documentos | 200 |
+| `POST` | `/docs/upload` | Faz upload de um arquivo | 201 |
+| `GET` | `/docs/{doc_id}` | Retorna metadados de um documento | 200 |
+| `DELETE` | `/docs/{doc_id}` | Remove o documento | 204 |
+
+#### POST /docs/upload
+
+Aceita `multipart/form-data` com o campo `file`. Tipos permitidos: `application/pdf` e `text/plain`.
+
+**Resposta (201):**
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "filename": "relatorio.pdf",
+  "content_type": "application/pdf",
+  "size": 204800
+}
+```
+
+#### GET /docs/ e GET /docs/{doc_id}
+
+Retornam o mesmo schema acima (lista ou objeto único).
 
 ---
 
@@ -71,37 +115,19 @@ Todos os erros retornam JSON no formato:
 
 ---
 
-## Estrutura
-
-```
-├── backend/app/
-│   ├── core/
-│   │   ├── config.py        # Settings com pydantic-settings
-│   │   ├── protocols.py     # StorageBackend, DocStore (contratos)
-│   │   ├── exceptions.py    # Hierarquia de erros do domínio
-│   │   └── dependencies.py  # Wiring via FastAPI Depends
-│   ├── infra/
-│   │   ├── storage_local.py    # Armazenamento local async
-│   │   └── doc_store_memory.py # Metadados em memória
-│   ├── services/
-│   │   └── docs.py          # Lógica de negócio
-│   ├── routers/
-│   │   ├── docs.py          # Endpoints de documentos
-│   │   └── health.py        # Health check
-│   └── main.py              # App, lifespan, exception handler, routers
-└── frontend/
-    └── src/
-        ├── components/
-        │   ├── UploadCard.jsx
-        │   └── DocumentList.jsx
-        └── App.jsx
-```
-
----
-
 ## Variáveis de ambiente
 
-Crie um `.env` dentro de `backend/app/`:
+O backend lê de um arquivo `.env` dentro de `backend/app/`. Em Docker as variáveis são definidas no `docker-compose.yml`.
+
+| Variável | Padrão | Descrição |
+|----------|--------|-----------|
+| `AMBIENTE` | `dev` | Ambiente de execução |
+| `DEBUG` | `false` | Modo debug |
+| `STORAGE_BACKEND` | `local` | Backend de armazenamento |
+| `UPLOAD_DIR` | `uploads` | Diretório de uploads |
+| `MAX_FILE_SIZE_MB` | `10` | Tamanho máximo por arquivo (MB) |
+
+Exemplo de `.env` para desenvolvimento local:
 
 ```env
 AMBIENTE=dev
@@ -109,4 +135,42 @@ DEBUG=false
 STORAGE_BACKEND=local
 UPLOAD_DIR=uploads
 MAX_FILE_SIZE_MB=10
+```
+
+---
+
+## Estrutura
+
+```
+.
+├── docker-compose.yml
+├── backend/
+│   ├── Dockerfile
+│   └── app/
+│       ├── pyproject.toml
+│       ├── main.py              # App, lifespan, exception handler
+│       ├── core/
+│       │   ├── config.py        # Settings via pydantic-settings
+│       │   ├── protocols.py     # Contratos StorageBackend e DocStore
+│       │   ├── exceptions.py    # Hierarquia de erros do domínio
+│       │   └── dependencies.py  # Wiring via FastAPI Depends
+│       ├── infra/
+│       │   ├── storage_local.py    # I/O de arquivos com aiofiles
+│       │   └── doc_store_memory.py # Metadados em memória (dict)
+│       ├── services/
+│       │   └── docs.py          # Lógica de negócio
+│       └── routers/
+│           ├── docs.py          # Endpoints /docs
+│           └── health.py        # Endpoint /health
+└── frontend/
+    ├── Dockerfile
+    ├── nginx.conf               # Proxy /docs e /health → api:8000
+    ├── vite.config.js
+    └── src/
+        ├── App.jsx
+        ├── main.jsx
+        └── components/
+            ├── UploadCard.jsx
+            ├── DocumentList.jsx
+            └── DocModal.jsx
 ```
