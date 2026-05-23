@@ -1,8 +1,6 @@
 # PaperBox
 
-API de ingestão e organização de documentos pessoais. Envie PDFs e TXTs, organize em coleções e busque por keyword.
-
-Projeto em desenvolvimento — construído do zero como exercício de aprendizado com FastAPI.
+API de ingestão e organização de documentos pessoais. Envie PDFs e TXTs e consulte metadados via REST.
 
 ---
 
@@ -57,10 +55,25 @@ Interface disponível em `http://localhost:5173`
 
 ---
 
+## Erros
+
+Todos os erros retornam JSON no formato:
+
+```json
+{ "error": "código_do_erro", "message": "descrição" }
+```
+
+| Status | Código | Quando |
+|--------|--------|--------|
+| 400 | `entrada_invalida` | Tipo de arquivo não permitido |
+| 404 | `não_encontrada` | Documento não existe |
+| 413 | `tamanho_invalido` | Arquivo excede o limite configurado |
+
+---
+
 ## Estrutura
 
 ```
-.
 ├── backend/app/
 │   ├── core/
 │   │   ├── config.py        # Settings com pydantic-settings
@@ -75,7 +88,7 @@ Interface disponível em `http://localhost:5173`
 │   ├── routers/
 │   │   ├── docs.py          # Endpoints de documentos
 │   │   └── health.py        # Health check
-│   └── main.py              # App, lifespan, routers
+│   └── main.py              # App, lifespan, exception handler, routers
 └── frontend/
     └── src/
         ├── components/
