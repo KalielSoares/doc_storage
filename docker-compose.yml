@@ -1,0 +1,26 @@
+services:
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - uploads_data:/code/uploads
+    environment:
+      AMBIENTE: dev
+      STORAGE_BACKEND: local
+      UPLOAD_DIR: uploads
+      MAX_FILE_SIZE_MB: "10"
+
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+
+volumes:
+  uploads_data:

@@ -12,8 +12,8 @@ class DocStoreMemory():
         if document_id in self._store:
             return self._store.get(document_id)
 
-    async def read(self) -> list[dict] : 
-        return list(self._store.values())
+    async def read(self) -> list[dict] :
+        return [{"id": doc_id, **meta} for doc_id, meta in self._store.items()]
     
     async def delete(self,document_id: str) -> None :
         self._store.pop(document_id)

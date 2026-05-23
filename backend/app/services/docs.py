@@ -11,11 +11,11 @@ class DocsService():
         self.storage_backend = storage_backend
         self.doc_store = doc_store
 
-    async def create(self,metadata: Metadata, document: bytes) -> str:
+    async def create(self,metadata: Metadata, document: bytes) -> dict:
         id = str(uuid.uuid4())
         await self.doc_store.create(id, metadata)
         await self.storage_backend.create(id, document)
-        return id
+        return { "id" : id, **metadata}
     
     async def delete(self, document_id: str) -> None : 
         await self.doc_store.delete(document_id)
@@ -33,4 +33,5 @@ class DocsService():
     async def read_by_id(self, document_id : str) -> dict | None :
         doc = await self.doc_store.read_by_id(document_id)
         if doc is None:
-            raise NotFoundedError(document_id)       
+            raise NotFoundedError(document_id)
+        return doc       

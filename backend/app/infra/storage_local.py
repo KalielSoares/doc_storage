@@ -1,4 +1,5 @@
 import aiofiles
+import aiofiles.os
 from core.config import Settings
 
 class LocalStorage:

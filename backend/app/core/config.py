@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     storage_backend: Literal["local"] = "local"
     upload_dir: str = "uploads"
     max_file_size_mb: int = 10
-    allowed_extensions: list[str] = ['pdf','txt']
+    allowed_extensions: list[str] = ["application/pdf", "text/plain"]
 
 @lru_cache
 def get_settings() -> Settings:
